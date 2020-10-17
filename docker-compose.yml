@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  web_ghost:
+    image: ghost:3-alpine
+    restart: always
+    ports:
+      - 8080:2368
+    environment:
+      database__client: mysql
+      database__connection__host: database
+      database__connection__user: root
+      database__connection__password: P@ssword123
+      database__connection__database: ghost_db
+      url: http://localhost:8080
+    volumes: 
+      - ./data:/var/lib/ghost/content
+    networks: 
+      - ghost_network
+
+  database:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssword123
+      MYSQL_DATABASE: ghost_db
+    volumes: 
+      - ./mysql:/var/lib/mysql
+    networks: 
+      - ghost_network
+
+networks: 
+  ghost_network:
